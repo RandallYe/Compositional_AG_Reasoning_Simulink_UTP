@@ -1,0 +1,122 @@
+\begin{figure}[htb!]
+    \captionsetup[subfigure]{justification=centering}
+    \centering 
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \node [input, name=input1] (input1) {};
+            \node [block, right of=input1, node distance=1.5cm] (b1) {B1};
+            \node [block, below of=b1, dashed] (id) {Id};
+            \node [input, left of=id, node distance=1.5cm] (input2) {};
+            \node [block, minimum height=8em] (b2) at ([xshift=2cm, yshift=-1cm]b1){B2};
+            \draw [->] (input1) -- (b1);
+            \draw [->] (b1) -- (b1 -| b2.west);
+            \draw [->] (input2) -- (input2 -| b2.west);
+        \end{tikzpicture}
+        \caption{Id}
+        \label{fig:id}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \node [input, name=input1] (input1) {};
+            \node [block, right of=input1, node distance=2.5cm] (b1) {B1};
+            \node [block, below of=b1] (b2) {B2};
+            \draw [->] (input1) --node[name=z,anchor=north]{} (b1);
+            \node [block, dashed] (split) at (z) {Split};
+            \draw [->] (input1) -- (b1);
+            \draw [->] (z) |- (b2);
+        \end{tikzpicture}
+        \caption{Split}
+        \label{fig:split}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \begin{pgfonlayer}{fg}
+                \node [input, name=input1] (input1) {};
+                \node [block, right of=input1, node distance=3cm] (b1) {B1};
+                \node [block, below of=b1] (b2) {B2};
+                \node [input, left of=b2, node distance=3cm] (input2) {};
+                \node [block, dashed, minimum height=8em] (router) at ([xshift=1.5cm, yshift=-1cm]input1.east) {Router};
+                %\node [output, right of=b1, node distance=1.5cm] (output1) {};
+                %\node [output, right of=b2, node distance=1.5cm] (output2) {};
+                \draw [->] (input1) --node[name=z1]{} (b1);
+                \draw [->] ([xshift=0.5cm]input1) -- (b2);
+                %\draw [->] (z1) -- (b2);
+                \draw [->] (input2) --node[name=z2]{} (b2);
+                \draw [->] ([xshift=0.5cm]input2) -- (b1);
+                %\draw [->] (z2) -- (b1);
+                %\draw [->] (z1 |- b2.west) -- (z1 -| b2.west);
+                %\draw [->] (z2 |- b1.west) -- (z2 -| b1.west);
+                %\draw [->] (b2) -- (output2);
+            \end{pgfonlayer}
+            \begin{pgfonlayer}{bg}
+                \node [rectangle, dashed, fit= (b1) (b2), label=left:] {};
+            \end{pgfonlayer}
+        \end{tikzpicture}
+        \caption{Router}
+        \label{fig:router}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \begin{pgfonlayer}{fg}
+                \node [input, name=input1] (input1) {};
+                \node [block, right of=input1, node distance=1.5cm] (b1) {B1};
+                \node [block, right of=b1] (b2) {B2};
+                \node [output, right of=b2, node distance=1.5cm] (output) {};
+                \draw [->] (input1) -- (b1);
+                \draw [->] (b1) -- (b2);
+                \draw [->] (b2) -- (output);
+            \end{pgfonlayer}
+            \begin{pgfonlayer}{bg}
+                \node [rectangle, draw, dashed, fit= (b1) (b2), label=left:] {};
+            \end{pgfonlayer}
+        \end{tikzpicture}
+        \caption{Sequential Composition}
+        \label{fig:seq_comp}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \begin{pgfonlayer}{fg}
+                \node [input, name=input1] (input1) {};
+                \node [block, right of=input1, node distance=1.5cm] (b1) {B1};
+                \node [block, below of=b1] (b2) {B2};
+                \node [input, left of=b2, node distance=1.5cm] (input2) {};
+                \node [output, right of=b1, node distance=1.5cm] (output1) {};
+                \node [output, right of=b2, node distance=1.5cm] (output2) {};
+                \draw [->] (input1) -- (b1);
+                \draw [->] (b1) -- (output1);
+                \draw [->] (input2) -- (b2);
+                \draw [->] (b2) -- (output2);
+            \end{pgfonlayer}
+            \begin{pgfonlayer}{bg}
+                \node [rectangle, draw, dashed, fit= (b1) (b2), label=left:] {};
+            \end{pgfonlayer}
+        \end{tikzpicture}
+        \caption{Parallel Composition}
+        \label{fig:par_comp}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering 
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \node [input, name=input1] (input1) {};
+            \node [input, below of=input1] (input2) {};
+            \node [block, minimum height=6em] (b1) at ([xshift=2cm, yshift=-1cm]input1){B};
+            \node [tmp, above of=b1] (tmp1){};
+            \node [output, right of=input1, node distance=4cm] (output1) {};
+            \node [output, right of=input2, node distance=4cm] (output2) {};
+            %\draw [->] (input1) -- (input1 -| b1.west);
+            %\draw [->] (input2) -- (input2 -| b1.west);
+            %\draw [->] (b1.east) |- (output1) |- (temp1) -| (input1) -- (input1 -| b1.west);
+            \draw [->] ([yshift=0.5cm]b1.east) -- ++(0.7cm, 0) -- ++(0,1.1cm) -- ++(-2.6cm, 0) -- ++(0,-1.1cm) -- ([yshift=0.5cm]b1.west);
+            \draw [->] ([yshift=-0.5cm]b1.east) -- ++(1cm,0); 
+            \draw [->] ([xshift=-1cm, yshift=-0.5cm]b1.west) -- ([yshift=-0.5cm]b1.west); 
+        \end{tikzpicture}
+        \caption{Feedback}
+        \label{fig:fd_comp}
+    \end{subfigure}
+    \caption{Composition of Blocks}\label{fig:compose}
+\end{figure}

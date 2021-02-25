@@ -1,0 +1,31 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Preliminaries}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Control Law Diagrams and Simulink}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Unifying Theories of Programming}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Designs}{subsection.2.2}% 5
+\BOOKMARK [1][-]{section.3}{Assumptions and General Procedure of Reasoning}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Assumptions}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{General Procedure of Applying Assumption-Guarantee Reasoning}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Semantic Translation of Blocks}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{State Space}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Healthiness Condition: SimBlock}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Blocks}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Pattern}{subsection.4.3}% 13
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Simulink Blocks}{subsection.4.3}% 14
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Virtual Blocks}{subsection.4.3}% 15
+\BOOKMARK [2][-]{subsection.4.4}{Subsystems}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Block Compositions}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{Sequential Composition}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{Parallel Composition}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.3}{Feedback}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.4}{Composition Examples}{section.5}% 21
+\BOOKMARK [1][-]{section.6}{Case Study}{}% 22
+\BOOKMARK [2][-]{subsection.6.1}{Modelling}{section.6}% 23
+\BOOKMARK [2][-]{subsection.6.2}{Subsystems Verification}{section.6}% 24
+\BOOKMARK [2][-]{subsection.6.3}{Requirement Verification}{section.6}% 25
+\BOOKMARK [3][-]{subsubsection.6.3.1}{Requirement 3 and 4}{subsection.6.3}% 26
+\BOOKMARK [3][-]{subsubsection.6.3.2}{Requirement 1}{subsection.6.3}% 27
+\BOOKMARK [3][-]{subsubsection.6.3.3}{Requirement 2}{subsection.6.3}% 28
+\BOOKMARK [2][-]{subsection.6.4}{Summary}{section.6}% 29
+\BOOKMARK [1][-]{section.7}{Conclusions}{}% 30
+\BOOKMARK [2][-]{subsection.7.1}{Progress Summary}{section.7}% 31

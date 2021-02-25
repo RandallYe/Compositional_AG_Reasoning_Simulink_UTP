@@ -1,0 +1,34 @@
+\section{Assumptions and General Procedure of Reasoning}
+\label{sec:assum}
+\subsection{Assumptions}
+\emph{Causality} We assume the discrete-time systems modelled in Simulink diagrams are \emph{causal} where the output at any time only depends on values of present and past inputs. Consequently, if inputs to a casual system are identical up to some time, their corresponding outputs must also be equal up to this time.
+
+\emph{Single-rate} This mechanised work captures only single sampling rate Simulink models, which means the timestamps of all simulation steps are multiples of a base period $T$. Eventually, steps are abstracted and measured by step numbers (natural numbers $\nat$) and $T$ is removed from its timestamp. 
+
+An \emph{algebraic loop} occurs in simulation when there exists a signal loop with only direct feedthrough blocks in the loop, such as instantaneous feedback without delay in the loop. \cite{Bostroem2016, Caspi2003, Dragomir2016} assume there are no algebraic loops in Simulink diagrams and RCRS~\cite{Preoteasa2017} identifies it as a future work. Our theoretical framework can reason about discrete-time block diagrams with algebraic loops: specifically check if there are solutions and find the solutions.
+
+The signals in Simulink can have many data types, such as signed or unsigned integer, single float, double float, and boolean. %nine basic types, enumeration, complex, vector and matrix, fixed data type, and bus object. 
+The default type for signals are \emph{double} in Simulink. This work uses real numbers in Isabelle/HOL as a universal type for all signals. Real numbers in Isabelle/HOL are modelled precisely using Cauchy sequences, which enables us to reason in the theorem prover. This is a reasonable simplification because all other types could be expressed using real numbers, such as boolean as 0 and 1. 
+
+%Signal as a function from simulation time to a universal real type, model scalar now but could be extended to support vector and matrix
+%
+%Normal design (precondition is a condition): all outputs could be expressed as relation to inputs only, therefore even outputs are referred in preconditions but they are able to be converted into equal expressions with inputs only.
+%
+%Deterministic (if there is a solution for a feedback diagram, it must be unique.)
+%
+%Non-terminating
+%
+%Fixed number of inputs and outputs: SimBlock condition
+
+\subsection{General Procedure of Applying Assumption-Guarantee Reasoning}
+Simulink blocks are semantically mapped to designs in UTP where additionally we model assumptions of blocks to avoid unpredictable behaviour (such as a divide by zero error in the Divide block) and ensure healthiness of blocks. The general procedure of applying AG reasoning to Simulink blocks is given below.
+
+\begin{itemize}
+    \item Single blocks and atomic subsystems are translated to single designs with assumptions and guarantees, as well as block parameters. This is shown in Section~\ref{sec:trans}.
+    \item Hierarchical block connections are modelled as compositions of designs ($I$) by means of sequential composition, parallel composition and feedback.
+    \item Properties or Requirements of block diagrams ($S$) to be verified are modelled as designs as well.
+    \item The refinement relation ($S \refinedby I$) in UTP is used to verify if a given property is satisfied by a block diagram (or a subsystem) or not. Our approach supports compositional reasoning according to monotonicity of composition operators in terms of the refinement relation. Provided two properties $S_1$ and $S_2$ are verified to hold in two blocks or subsystems $I_1$ and $I_2$ respectively, then composition of the properties is satisfied by the composition of the blocks or subsystems in terms of the same operator.
+   \begin{align*}
+      & \left(S_1 \refinedby I_1 \land  S_2 \refinedby I_2\right) \implies \left(S_1 \ op\ S_2 \refinedby I_1 \ op\ I_2\right) &
+   \end{align*}
+\end{itemize}

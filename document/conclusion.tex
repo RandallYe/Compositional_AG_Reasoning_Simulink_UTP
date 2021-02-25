@@ -1,0 +1,37 @@
+\section{Conclusions}
+\label{sec:conclu}
+
+In this report, we present our work for the VeTSS funded project ``Mechanised Assume-Guarantee Reasoning for Control Law Diagrams via Circus'' from developed theories and laws as well as their mechanisation in Isabelle/UTP. In addition, we present practical application of our theories to reason about a Simulink model in the aircraft cabin pressure control application. Our mechanisation is also attached to this report.  
+
+\subsection{Progress Summary}
+\begin{table}
+    \centering
+    \begin{tabular}{|l|p{10cm}|l|}
+       \hline
+       Work Package & Description & Progress \\
+       \hline
+       WP1 & Review current Simulink reasoning solutions and put forward a new contract-based methodology (using UTP design theory) to reason about faulty behaviour through assumptions & 100\% \\
+       \hline
+       WP2 & Define assumption-guarantee contracts for the Simulink semantics and mechanise them in Isabelle/UTP, including operators and a limited selection of Simulation discrete blocks that are used in our case studies, and mechanise in Isabelle/UTP & 100\%  \\
+       \hline
+       WP3 & Mechanise industrial case studies (building case and post landing finalize case) in Isabelle/UTP using mechanised block libraries (produced in WP2), including modelling, contract calculation, and proof & 50\% \\
+       \hline
+       WP4 & Investigate the weakest assumption calculus based on the examples, in order to automate reasoning about interferences between blocks and subsystems & 25\% \\
+       \hline
+    \end{tabular}
+    \caption{Project Progress Summary}
+    \label{tab:progress}
+\end{table}
+
+The project wss initially proposed to have four work packages. And a summary of progress is shown in Table~\ref{tab:progress}. 
+
+WP1 – framework: we reviewed current solutions that use contract-based reasoning and Circus-based program verification for Simulink. Eventually we put forward a new contract-based assume-guarantee reasoning methodology for Simulink diagrams. The theoretical part of this approach is based on the theory of design in UTP that is presented in this report. 
+
+WP2 – definition and mechanisation: one advantage of using designs for reasoning is its existing theory and mechanisation in Isabelle/UTP. However, in order to accommodate Simulink diagrams into designs easily, we have defined three additional virtual blocks (Identity, Split and Router) and two extra operators (Parallel Composition and Feedback). They correspond to signal connections and block composition in Simulink. With these new blocks and operators (as well as existing operators for designs), we could translate Simulink diagrams into composition of designs. In addition, we have mechanised (in Isabelle/UTP) the three virtual blocks and 14 Simulink blocks (Constant, Unit Delay, Discrete-Time Integrator, Sum, Product, Gain, Saturation, MinMax, Rounding, Logic Operator, Relational Operator, Switch, Data Type Conversion and Initial Condition) that will be used in our case studies.  
+
+WP3 – case studies: using definitions and mechanisation of these blocks and operators, we have mechanised one of our case study (the post landing finalize) in Isabelle/UTP. 
+
+WP4 - Though time did not permit us to consider the weakest assumption calculus for Simulink in details, in a parallel project we have explored a calculus for weakest reactive rely conditions for reactive contracts based in UTP. The details of this can be found in a draft journal paper under review for Theoretical Computer Science~\cite{Foster2017b}. This initial study provides necessary background for future work with Simulink. 
+
+Due to the fact that we started this project two months late since October 2017 because of delays in receiving funding, therefore we have limited time to finish all proposed work. We have not verified all requirements of the post landing finalize case, have not started the second building case study, and have investigaged WP4 partially.
+

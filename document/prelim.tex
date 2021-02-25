@@ -1,0 +1,83 @@
+\section{Preliminaries}\label{sec:prel}
+\subsection{Control Law Diagrams and Simulink} \label{ssec:simulink}
+Simulink is a model-based design modelling, analysis and simulation tool for signal processing systems and control systems. It offers a graphical modelling language which is based on hierarchical block diagrams. Its diagrams are composed of subsystems and blocks as well as connections between these subsystems and blocks. In addition, subsystems also can consists of others subsystems and blocks. And single function blocks have inputs and outputs, and some blocks also have internal states.
+
+There is no formal semantics for Simulink. A consistent understanding \cite{Marian2007, Cavalcanti2013} of the simulation in Simulink is based on an \emph{idealized} time model. All executions and updates of blocks are performed \emph{instantaneously} (and infinitely fast) at exact simulation steps. Between the simulation steps, the system is \emph{quiescent} and all values held on lines and blocks are constant. The inputs, states and outputs of a block can only be updated when there is a time hit for this block. Otherwise, all values held in the block are constant too though at exact simulation steps. According to this idealized time model, it is inappropriate to assume that blocks are sequentially executed. For example, for a block it is inappropriate to say it takes its inputs, calculates its outputs and states, and then outputs the results from this point of view. Simulation and code generation of Simulink diagrams use sequential semantics for implementation. But it is not always necessary. 
+Simulink needs to have a mathematical and denotational semantics, which UTP provides.
+
+Based on the idealized time model, a single function block can be regarded as a relation between its inputs and outputs. For instance, a unit delay block specifies that its initial output is equal to its initial condition and its subsequent output is equal to previous input. Then connections of blocks establish further relations between blocks. A directed connection from one block to another block specifies that the output of one block is equal to the input of another block. Finally, hierarchical block diagrams establish a relation network between blocks and subsystems. 
+
+\subsection{Unifying Theories of Programming}
+UTP is a unified framework to provide a theoretical basis for describing and specifying computer languages across different paradigms such as imperative, functional, declarative, nondeterministic, concurrent, reactive and high-order. A theory in UTP is described using three parts: %\emph{alphabet}, \emph{signature} and \emph{healthiness conditions}. 
+\emph{alphabet}, a set of variable names for the theory to be studied; \emph{signature}, rules of primitive statements of the theory and how to combine them together to get more complex program; and \emph{healthiness conditions}, a set of mathematically provable laws or equations to characterise the theory.
+
+The alphabetised relational calculus \cite{Cavalcanti2004} is the most basic theory in UTP. A relation is defined as a predicate with undecorated variables ($v$) and decorated variables ($v'$) in its alphabet. $v$ denotes the observation made initially and $v'$ denotes the observation made at the intermediate or final state. 
+
+The understanding of the simulation in Simulink is very similar to the concept ``programs-as-predicates''~\cite{Hoare1984}. This is the similar idea that the Refinement Calculus of Reactive Systems (RCRS) \cite{Preoteasa2017} uses to reason about reactive systems. RCRS is a compositional formal reasoning framework for reactive systems. The language is based on monotonic property transformers which is an extension of monotonic predicate transformers~\cite{Preoteasa2014b}.  This semantic understanding makes Unifying Theories of Programming (UTP) \cite{Hoare1998} intrinsically suitable for reasoning of the semantics of Simulink simulation because UTP uses an alphabetised predicate calculus to model computations.
+
+Refinement calculus is an important concept in UTP. Program correctness is denoted by $S \refinedby P$, which means that the observations of the program $P$ must be a subset of the observations permitted by the specification $S$. For instance, $(x = 2)$ is a refinement of the predicate $(x > 1)$. A refinement sequence is shown in (\ref{refine_seq}). $S1$ is more general and abstract specification than $S2$ and thus more easier to implement. The predicate $\ptrue$ is the easiest one and can be implemented by anything. $P2$ is more specific and determinate program than $P1$ and thus $P2$ is more useful in general. $\pfalse$ is the strongest predicate and it is impossible to implement in practice.
+%{\setlength{\abovedisplayskip}{1pt}
+\begin{flalign}
+		\textbf{true} \refinedby S1 \refinedby S2 \refinedby P1 \refinedby P2 \refinedby \textbf{false} \label{refine_seq}
+\end{flalign}
+%%
+
+\subsubsection{Designs}
+\emph{Designs} are a subset of the alphabetised predicates that use a particular variable $ok$ to record information about the start and termination of programs. The behaviour of a design is described from initial observation and final observation by relating its precondition $P$ (assumption) to the postcondition $Q$ (commitment) as $\design{P}{Q}$ \cite{Woodcock2004, Hoare1998} (assuming $P$ holds initially, then Q is established). Therefore, the theory of designs is intrinsically suitable for assume-guarantee reasoning~\cite{Foster2017b}. 
+
+\begin{definition}[Design] \label{def:design} 
+  \begin{align*}
+      & \design{P}{Q} \defs P \land ok \implies Q \land ok' & 
+  \end{align*}
+\end{definition}
+A design is defined in \ref{def:design} where $ok$ records the program has started and $ok'$ that it has terminated. It states that if the design has started ($ok=\logtrue{}$) in a state satisfying its precondition $P$, then it will terminate ($ok'=\logtrue{}$) with its postcondition $Q$ established. We introduce some basic designs.
+
+\begin{definition}[Basic Designs] \label{def:basic_des}
+  \begin{align*}
+      \topD ~~\defs~~& \design{\true}{\false} = \lnot ok \tag*{[Miracle]}\\
+      \botD ~~\defs~~& \design{\false}{\false} = \trueD \tag*{[Abort]}\\
+      (x := e) ~~\defs~~& \left(\design{\true}{x'=e\land y' = y \land \cdots}\right) \tag*{[Assignment]} \\ 
+      \IID ~~\defs~~& \left(\design{\true}{\II}\right) \tag*{[Skip]}
+  \end{align*}
+\end{definition}
+
+Abort ($\botD$) and miracle ($\topD$) are the top and bottom element of a complete lattice formed from designs under the refinement ordering. Abort ($\botD$) is never guaranteed to terminate and miracle establishes the impossible. In addition, abort is refined by any other design and miracle refines any other designs. Assignment has precondition $\true$ provided the expression $e$ is well-defined and establishes that only the variable $x$ is changed to the value of $e$ and other variables have not changed. The skip $\IID$ is a design identity that always terminates and leaves all variables unchanged.
+
+Designs can be sequentially composed with the following theorem:
+\begin{theorem}[Sequential Composition] \label{thm:des_seq}
+    \begin{align*}
+    %    \left(\design{P_1}{Q_1} \relsemi \design{P_2}{Q_2}\right) ~~=~~& 
+    %        \left(\design{\left(\lnot\left(\lnot P_1 \relsemi \true\right) \land \lnot \left(Q_1 \relsemi \lnot P_2\right)\right)}{Q_1 \relsemi Q_2}\right)\\
+    %                                                              ~~=~~& 
+    %        \left(\design{\left(\lnot\left(\lnot P_1 \relsemi \true\right) \land \left(Q_1 \mywp P_2\right)\right)}{Q_1 \relsemi Q_2}\right)\\
+        \left(\design{p_1}{Q_1} \relsemi \design{P_2}{Q_2}\right) ~~=~~& 
+        \left(\design{\left(p_1 \land \lnot \left(Q_1 \relsemi \lnot P_2\right)\right)}{Q_1 \relsemi Q_2}\right) \tag*{[$p_1$-condition]}
+    \end{align*}
+\end{theorem}
+
+A sequence of designs terminates when $p_1$ holds and $Q_1$ guarantees to establish $P_2$ provided $p_1$ is a condition. On termination, sequential composition of their postconditions is established. A condition is a particular predicate that only has input variables in its alphabet. In other words, a design of which its precondition is a condition only makes the assumption about its initial observation (input variables) and without output variables. That is the same case for our treatment of Simulink blocks. Furthermore, sequential composition has two important properties: associativity and monotonicity which are given in the theorem below.
+\begin{theorem}[Associativity, Monotonicity]
+    \begin{align*}
+        & P_1 \dcomp \left(P_2 \dcomp P_3\right) = \left(P_1 \dcomp P_2\right) \dcomp P_3 & \tag*{[Associativity]} \\
+        & \left(P_1 \dcomp Q_1\right) \refinedby \left(P_2 \dcomp Q_2\right) & \tag*{[Monotonicity]} 
+    \end{align*}
+    \label{thm:seq}
+\end{theorem}
+
+Refinement of designs is given in the theorem below.
+\begin{theorem}[Refinement]
+    \begin{align*}
+        \left(\design{P_1}{Q_1} \refinedby \design{P_2}{Q_2}\right) ~~=~~& \left(P_2 \refinedby P_1\right) \land \left(Q_1 \refinedby P_1 \land Q_2\right)\\
+                                                     ~~=~~& \left[P_1 \implies P_2\right] \land \left[P_1 \land Q_2 \implies Q_1\right]\\
+    \end{align*}
+\end{theorem}
+Refinement of designs is achieved by either weakening the precondition, or strengthening the postcondition in the presence of the precondition.
+
+In addition, we define two notations $pre_D$ and $post_D$ to retrieve the precondition of the design and the postcondition in the presence of the precondition. 
+\begin{definition}[$pre_D$ and $post_D$]
+    \begin{align*}
+        & pre_D\left(\design{P}{Q}\right) \defs P & \\
+        & post_D\left(\design{P}{Q}\right) \defs \left(P \implies Q\right) & \\
+    \end{align*}
+\end{definition}
+
